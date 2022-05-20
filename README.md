@@ -1,9 +1,9 @@
 # Anchor-uploader - An automation tool to publish your podcasts
 
-This is a docker image that can automate uploads to anchor.fm .  It is based on Schrodinger-Hat/youtube-to-anchorfm .  I am not affiliated with Anchor.fm or anyone else of consequence.
+This is a docker image that can automate uploads to anchor.fm .  It is based on [Schrodinger-Hat/youtube-to-anchorfm](https://github.com/Schrodinger-Hat/youtube-to-anchorfm) .  I am not affiliated with Anchor.fm or anyone else of consequence.
 ## How it works
 
-This uses puppeteer with a headless chrome module to upload to Anchor.  WIP, and may be abandoned.
+This uses puppeteer with a headless chrome module to upload to Anchor.  WIP, and may be abandoned.  
 
 Currently it uploads all of the files in the mounted folder in the order that readdirSync supplies them(alphabetic, at least when running this on WSL2).  It will probably freak out if there is anything besides audio files in the folder, including subdirectories.
 
