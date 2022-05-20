@@ -14,8 +14,8 @@ var numfiles=0;
 (async () => {
 	try {
 		let files = await fs.readdirSync(path);
-		
-		
+		const event = new Date();
+		console.log(event.toTimeString());
 		for (let file of files) {
 			
 			numfiles++;
@@ -26,8 +26,9 @@ var numfiles=0;
 			}else{
 				await doNothing(file);
 			}
-			const elapsed=fancyTimeFormat((Date.now()-starttime)/1000);
-			const avg=fancyTimeFormat(((Date.now()-starttime)/1000)/numfiles);
+			const eventtime = new Date();
+			console.log(eventtime.toTimeString());
+			console.log(fancyTimeFormat(Date.now()/1000));
 			console.log('Finished '+numfiles+' files in '+elapsed+' secs AVG: '+avg);
 		}
 	} catch (err) {
