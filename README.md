@@ -17,8 +17,9 @@ Currently it uploads all of the files in the mounted folder in the order that re
 			volumes:
 				- '/path-to-files/:/rnf'
 			environment:
-				- LIVE=true            #false means no files uploaded, useful to test upload order
-				- SAVE_AS_DRAFT=false  #true doesn't publish
+				- LIVE=true          		#false means no files uploaded, useful to test upload order
+				- SAVE_AS_DRAFT=false		#true doesn't publish
+				- REGEX_FOR_TITLES="\.[^.]*$"   #regex to remove from filename to use as title, default removed file extension
 				- EMAIL=email@example.com
 				- 'PASSWORD=xxx'
 			image: anchor-uploader
