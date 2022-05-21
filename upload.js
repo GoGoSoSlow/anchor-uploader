@@ -1,11 +1,18 @@
 
 const fs = require('fs');
 const puppeteer = require('puppeteer');
+function GetEnvironmentVar(varname, defaultvalue) {
+    var result = process.env[varname];
+    if (result != undefined)
+        return result;
+    else
+        return defaultvalue;
+}
 const anchor_email=process.env.EMAIL;
 const anchor_pw=process.env.PASSWORD;
 const path='/rnf/';
 const UPLOAD_TIMEOUT = 60 * 15 * 1000;
-const saveDraftOrPublishButtonXPath = '//button/div[text()="Publish now"]';
+//const saveDraftOrPublishButtonXPath = '//button/div[text()="Publish now"]';
 const isExplicit = true;
 const draftMode = GetEnvironmentVar('SAVE_AS_DRAFT', 'false')
 const saveDraftOrPublishButtonXPath = draftMode == 'true' ? '//button[text()="Save as draft"]' : '//button/div[text()="Publish now"]'
@@ -22,7 +29,7 @@ var numfiles=0;
 			
 			numfiles++;
 			const live = process.env.LIVE;
-			//console.log(live);
+			console.log(live);
 			if (process.env.LIVE=='true'){
 				await doUpload(file);
 			}else{
@@ -32,7 +39,7 @@ var numfiles=0;
 			const elapsed = (starttime-Date.now())/1000;
 			const avg = ((starttime-Date.now())/1000)/numfiles;
 			console.log(eventtime.toTimeString());
-			console.log(fancyTimeFormat(Date.now()/1000));
+			//console.log(fancyTimeFormat(Date.now()/1000));
 			console.log('Finished '+numfiles+' files in '+elapsed+' secs AVG: '+avg);
 		}
 	} catch (err) {
