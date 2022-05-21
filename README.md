@@ -26,6 +26,7 @@ Currently it uploads all of the files in the mounted folder in the order that re
 # then
 docker-compose up
 
+If you have large episodes that fail, you may need to increase the UPLOAD_TIMEOUT in upload.js and rebuild the image.
 
 ## TODO
 remove uneccesary dependencies, configurable sorting of files, testing of unusual file names, better support for slow uploads, error handling and option to abandon uploads
