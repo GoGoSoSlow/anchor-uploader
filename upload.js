@@ -49,17 +49,21 @@ var numfiles=0;
 })()
 async function doNothing(file) {
 	console.log('did nothing to: '+file);
+	console.log(process.env.REGEX_FOR_TITLES);
+	const title = file.replace(new RegExp(process.env.REGEX_FOR_TITLES),"");
+	console.log("title: "+title);
 	return new Promise((resolve, reject) => resolve("yay"));
 }
 async function doUpload(file) {
 	//do stuff
 	console.log('uploading '+file)
-	console.log("Launching puppeteer");
+	//console.log("Launching puppeteer");
 	//line below is a little faster
 	//const browser = await puppeteer.launch({ args: ['--no-sandbox','--disable-setuid-sandbox','--disable-dev-shm-usage','--disable-accelerated-2d-canvas','--no-first-run','--no-zygote','--disable-gpu'] });
 	const browser = await puppeteer.launch({ args: ['--no-sandbox'] });
 	const page = await browser.newPage();
-
+	const title = file.replace(process.env.REGEX_FOR_TITLES,"");
+	console.log("title: "+title);
 	const navigationPromise = page.waitForNavigation();
 
 	await page.goto('https://anchor.fm/dashboard/episode/new');
@@ -67,7 +71,7 @@ async function doUpload(file) {
 	await page.setViewport({ width: 1600, height: 789 });
 
 	await navigationPromise;
-
+	
 	console.log("Trying to log in");
 	await page.type('#email', anchor_email);
 	await page.type('#password', anchor_pw);
@@ -81,7 +85,7 @@ async function doUpload(file) {
 	await inputFile.uploadFile(path+file);
 
 	console.log("Waiting for upload to finish");
-	await page.waitForTimeout(25 * 1000);
+	await page.waitForTimeout(25 * 1000);//25 sec wait, will also wait on line below
 
 	await page.waitForXPath('//div[contains(text(),"Save")]/parent::button[not(boolean(@disabled))]', { timeout: UPLOAD_TIMEOUT });
 	const [saveButton] = await page.$x('//div[contains(text(),"Save")]/parent::button[not(boolean(@disabled))]');
@@ -93,7 +97,8 @@ async function doUpload(file) {
 	// Wait some time so any field refresh doesn't mess up with our input
 	await page.waitForTimeout(2000);
 	await page.type('#title', file);
-
+	//await page.type('#title', title);
+	
 	console.log("-- Adding description");
 	await page.waitForSelector('div[role="textbox"]', { visible: true });
 	await page.type('div[role="textbox"]', file);
