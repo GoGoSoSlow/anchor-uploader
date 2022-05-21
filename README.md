@@ -17,7 +17,8 @@ Currently it uploads all of the files in the mounted folder in the order that re
 			volumes:
 				- '/path-to-files/:/rnf'
 			environment:
-				- LIVE=live
+				- LIVE=true            #false means no files uploaded, useful to test upload order
+				- SAVE_AS_DRAFT=false  #true doesn't publish
 				- EMAIL=email@example.com
 				- 'PASSWORD=xxx'
 			image: anchor-uploader

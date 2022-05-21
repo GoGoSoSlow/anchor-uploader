@@ -7,6 +7,8 @@ const path='/rnf/';
 const UPLOAD_TIMEOUT = 60 * 15 * 1000;
 const saveDraftOrPublishButtonXPath = '//button/div[text()="Publish now"]';
 const isExplicit = true;
+const draftMode = GetEnvironmentVar('SAVE_AS_DRAFT', 'false')
+const saveDraftOrPublishButtonXPath = draftMode == 'true' ? '//button[text()="Save as draft"]' : '//button/div[text()="Publish now"]'
 const selectorForExplicitContentLabel = isExplicit == 'true' ? 'label[for="podcastEpisodeIsExplicit-true"]' : 'label[for="podcastEpisodeIsExplicit-false"]';
 const starttime=Date.now();
 var numfiles=0;
@@ -21,12 +23,14 @@ var numfiles=0;
 			numfiles++;
 			const live = process.env.LIVE;
 			//console.log(live);
-			if (process.env.LIVE=='live'){
+			if (process.env.LIVE=='true'){
 				await doUpload(file);
 			}else{
 				await doNothing(file);
 			}
 			const eventtime = new Date();
+			const elapsed = (starttime-Date.now)/1000;
+			const avg = ((starttime-Date.now)/1000)/numfiles;
 			console.log(eventtime.toTimeString());
 			console.log(fancyTimeFormat(Date.now()/1000));
 			console.log('Finished '+numfiles+' files in '+elapsed+' secs AVG: '+avg);
