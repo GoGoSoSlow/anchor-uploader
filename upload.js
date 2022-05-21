@@ -29,15 +29,15 @@ var numfiles=0;
 			
 			numfiles++;
 			const live = process.env.LIVE;
-			console.log(live);
+			//console.log(live);
 			if (process.env.LIVE=='true'){
 				await doUpload(file);
 			}else{
 				await doNothing(file);
 			}
 			const eventtime = new Date();
-			const elapsed = (starttime-Date.now())/1000;
-			const avg = ((starttime-Date.now())/1000)/numfiles;
+			const elapsed = fancyTimeFormat((Date.now()-starttime)/1000);
+			const avg = fancyTimeFormat(((Date.now()-starttime)/1000)/numfiles);
 			console.log(eventtime.toTimeString());
 			//console.log(fancyTimeFormat(Date.now()/1000));
 			console.log('Finished '+numfiles+' files in '+elapsed+' secs AVG: '+avg);
