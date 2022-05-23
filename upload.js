@@ -11,7 +11,7 @@ function GetEnvironmentVar(varname, defaultvalue) {
 const anchor_email=process.env.EMAIL;
 const anchor_pw=process.env.PASSWORD;
 const path='/rnf/';
-const UPLOAD_TIMEOUT = 60 * 15 * 1000;
+const UPLOAD_TIMEOUT = 60 * 25 * 1000; //25mins
 //const saveDraftOrPublishButtonXPath = '//button/div[text()="Publish now"]';
 const isExplicit = true;
 const draftMode = GetEnvironmentVar('SAVE_AS_DRAFT', 'false')
@@ -85,7 +85,7 @@ async function doUpload(file) {
 	await inputFile.uploadFile(path+file);
 
 	console.log("Waiting for upload to finish");
-	await page.waitForTimeout(25 * 1000);//25 sec wait, will also wait on line below
+	await page.waitForTimeout(25 * 1000);//25 sec wait to avoid problem, will also wait on line below
 
 	await page.waitForXPath('//div[contains(text(),"Save")]/parent::button[not(boolean(@disabled))]', { timeout: UPLOAD_TIMEOUT });
 	const [saveButton] = await page.$x('//div[contains(text(),"Save")]/parent::button[not(boolean(@disabled))]');
