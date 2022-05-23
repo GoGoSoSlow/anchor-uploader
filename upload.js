@@ -46,6 +46,7 @@ var numfiles=0;
       console.log(`${err}`);
     }
 	
+	
 })()
 async function doNothing(file) {
 	console.log('did nothing to: '+file);
@@ -57,7 +58,7 @@ async function doNothing(file) {
 async function doUpload(file) {
 	//do stuff
 	console.log('uploading '+file)
-	//console.log("Launching puppeteer");
+	
 	//line below is a little faster
 	//const browser = await puppeteer.launch({ args: ['--no-sandbox','--disable-setuid-sandbox','--disable-dev-shm-usage','--disable-accelerated-2d-canvas','--no-first-run','--no-zygote','--disable-gpu'] });
 	const browser = await puppeteer.launch({ args: ['--no-sandbox'] });
@@ -121,8 +122,8 @@ async function doUpload(file) {
 	}
 
 	await navigationPromise;
-	await browser.close()
-
+	
+	await browser.close();
 	return new Promise((resolve, reject) => resolve("yay"));
 }
 function fancyTimeFormat(duration)

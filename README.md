@@ -30,7 +30,7 @@ docker-compose up
 
 ## TODO
 Make web interface w/preview of actions and ability to abandon uploads.
-remove uneccesary dependencies, configurable sorting of files, further testing of unusual file names, better support for slow uploads, error handling reuse browser between files
+remove uneccesary dependencies, configurable sorting of files, further testing of unusual file names, better support for slow uploads, error handling 
 
 # License
 
