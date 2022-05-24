@@ -19,14 +19,14 @@ const saveDraftOrPublishButtonXPath = draftMode == 'true' ? '//button[text()="Sa
 const selectorForExplicitContentLabel = isExplicit == 'true' ? 'label[for="podcastEpisodeIsExplicit-true"]' : 'label[for="podcastEpisodeIsExplicit-false"]';
 const starttime=Date.now();
 var numfiles=0;
-
+firstupload=true;
 (async () => {
 	try {
 		let files = await fs.readdirSync(path);
 		const event = new Date();
 		console.log(event.toTimeString());
 		for (let file of files) {
-			
+			browser = await puppeteer.launch({ args: ['--no-sandbox'] });
 			numfiles++;
 			const live = process.env.LIVE;
 			//console.log(live);
@@ -45,7 +45,7 @@ var numfiles=0;
 	} catch (err) {
       console.log(`${err}`);
     }
-	
+	browser.close();
 	
 })()
 async function doNothing(file) {
@@ -58,13 +58,10 @@ async function doNothing(file) {
 async function doUpload(file) {
 	//do stuff
 	console.log('uploading '+file)
-	
-	//line below is a little faster
-	//const browser = await puppeteer.launch({ args: ['--no-sandbox','--disable-setuid-sandbox','--disable-dev-shm-usage','--disable-accelerated-2d-canvas','--no-first-run','--no-zygote','--disable-gpu'] });
-	const browser = await puppeteer.launch({ args: ['--no-sandbox'] });
-	const page = await browser.newPage();
 	const title = file.replace(process.env.REGEX_FOR_TITLES,"");
 	console.log("title: "+title);
+	const page = await browser.newPage();
+	console.log("New chrome page");	
 	const navigationPromise = page.waitForNavigation();
 
 	await page.goto('https://anchor.fm/dashboard/episode/new');
@@ -72,14 +69,19 @@ async function doUpload(file) {
 	await page.setViewport({ width: 1600, height: 789 });
 
 	await navigationPromise;
+		
+	//line below is a little faster
+	//const browser = await puppeteer.launch({ args: ['--no-sandbox','--disable-setuid-sandbox','--disable-dev-shm-usage','--disable-accelerated-2d-canvas','--no-first-run','--no-zygote','--disable-gpu'] });
+	if (firstupload) {
+		
+		console.log("Trying to log in");
+		await page.type('#email', anchor_email);
+		await page.type('#password', anchor_pw);
+		await page.click('button[type=submit]');
+		await navigationPromise;
+		console.log("Logged in");
+	}
 	
-	console.log("Trying to log in");
-	await page.type('#email', anchor_email);
-	await page.type('#password', anchor_pw);
-	await page.click('button[type=submit]');
-	await navigationPromise;
-	console.log("Logged in");
-
 	await page.waitForSelector('input[type=file]');
 	console.log("Uploading audio file");
 	const inputFile = await page.$('input[type=file]');
@@ -123,7 +125,7 @@ async function doUpload(file) {
 
 	await navigationPromise;
 	
-	await browser.close();
+	await page.close();
 	return new Promise((resolve, reject) => resolve("yay"));
 }
 function fancyTimeFormat(duration)
